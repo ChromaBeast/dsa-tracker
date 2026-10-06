@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>DSA plan: 10 weeks, 116 problems</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Auth Screen Overlay (Login & Registration) -->
+  <div id="auth-screen" class="lock-screen hidden">
+    <div class="lock-card">
+      <div class="lock-icon" style="font-size: 2.2rem; margin-bottom: 6px;">⚡</div>
+      <h2 id="auth-title" style="margin: 0 0 4px; font-size: 1.25rem;">Welcome Back</h2>
+      <p id="auth-desc" style="margin: 0 0 16px; color: var(--mute); font-size: 0.85rem;">Enter your LeetCode handle and PIN.</p>
+      <div style="display: flex; flex-direction: column; gap: 12px; text-align: left;">
+        <div>
+          <label style="font-size: 0.75rem; font-weight: 600; color: var(--mute);">LeetCode Username</label>
+          <input id="auth-user" type="text" class="lock-input" placeholder="e.g. ChromaBeast" autocomplete="username" autofocus>
+        </div>
+        <div>
+          <label style="font-size: 0.75rem; font-weight: 600; color: var(--mute);">Unlock PIN / Password</label>
+          <input id="auth-pin" type="password" class="lock-input" placeholder="Enter PIN / password" autocomplete="current-password">
+        </div>
+        <label class="remember-row">
+          <input type="checkbox" id="auth-remember" checked>
+          <span>Remember me on this browser</span>
+        </label>
+        <div id="auth-error" class="lock-error"></div>
+        <button id="auth-submit-btn" type="button" class="btn-unlock">Log In</button>
+        <button id="auth-switch-btn" type="button" class="btn-switch">New user? Create a Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upstash Cloud Sync Status Modal -->
+  <div id="cloud-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>☁️ Cloud Sync Status</h3>
+        <button id="close-cloud-btn" class="modal-close" type="button">&times;</button>
+      </div>
+      <p id="cloud-sync-status" class="modal-desc" style="margin-bottom: 12px;">Connected 🟢 — Changes sync across all devices in real-time.</p>
+      <div style="background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 12px; margin-bottom: 16px;">
+        <p style="margin: 0; font-size: 0.8rem; color: var(--mute); line-height: 1.5;">
+          🔒 <strong>Zero-Knowledge Encryption</strong>: Your manual checklist is encrypted client-side using your personal PIN before being stored.
+        </p>
+      </div>
+      <div class="modal-actions">
+        <button id="ok-cloud-btn" class="btn-primary" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Change PIN Modal -->
+  <div id="pwd-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🔑 Change Unlock PIN</h3>
+        <button id="close-pwd-btn" class="modal-close" type="button">&times;</button>
+      </div>
+      <p class="modal-desc">Update your unlock PIN. Your study progress will be re-encrypted automatically.</p>
+      <div class="form-group">
+        <label for="pwd-current">Current PIN</label>
+        <input id="pwd-current" type="password" placeholder="Enter current PIN" class="modal-input">
+      </div>
+      <div class="form-group">
+        <label for="pwd-new">New PIN</label>
+        <input id="pwd-new" type="password" placeholder="Enter new PIN (min 4 chars)" class="modal-input">
+      </div>
+      <div class="form-group">
+        <label for="pwd-confirm">Confirm New PIN</label>
+        <input id="pwd-confirm" type="password" placeholder="Confirm new PIN" class="modal-input">
+      </div>
+      <div id="pwd-status" class="cloud-status"></div>
+      <div class="modal-actions">
+        <button id="pwd-submit-btn" class="btn-primary" type="button">Update PIN</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main id="main-content" class="hidden">
+    <header class="header-row">
+      <div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <h1 style="margin: 0;">DSA Plan: 116 Problems</h1>
+          <span id="user-badge" class="badge"></span>
+        </div>
+        <p class="sub" id="sync">Checking LeetCode sync...</p>
+      </div>
+      <div class="header-actions">
+        <button id="theme-btn" type="button" class="header-btn" title="Toggle theme">🌙</button>
+        <button id="cloud-btn" type="button" class="header-btn" title="Cloud Sync status">☁️ <span class="btn-text">Cloud</span></button>
+        <button id="pwd-btn" type="button" class="header-btn" title="Change unlock PIN">🔑 <span class="btn-text">PIN</span></button>
+        <button id="sync-btn" type="button" class="header-btn" title="Refresh LeetCode sync"><span class="spin-icon">🔄</span><span>Sync</span></button>
+        <button id="lock-btn" type="button" class="header-btn" title="Sign out"><span>🚪</span><span>Sign Out</span></button>
+      </div>
+    </header>
+
+    <div class="rules">
+      <strong>Daily routine</strong>
+      <ul>
+        <li>Mon to Sat: 2 new problems a day, 35 minutes each, timed.</li>
+        <li>Stuck at 35 minutes: read the solution, then solve it again from scratch the next day. Tick "redo" on it.</li>
+        <li>Sunday: redo every ticked problem. From week 4, add one mock interview a week.</li>
+        <li>Before coding, say your approach and its time and space cost out loud.</li>
+      </ul>
+    </div>
+
+    <div class="bar">
+      <div class="track"><div id="fill"></div></div>
+      <div class="stat"><span id="cnt"></span><span id="rdc"></span></div>
+    </div>
+
+    <div id="weeks"></div>
+    <button id="reset" class="btn-reset">Reset manual ticks</button>
+  </main>
+
+  <script type="module" src="dist/app.js"></script>
+</body>
+</html>

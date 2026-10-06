@@ -1,0 +1,15 @@
+{
+  "name": "dsa-tracker",
+  "version": "1.0.0",
+  "description": "10-week, 116-problem DSA plan with automated LeetCode sync via GitHub Actions",
+  "type": "module",
+  "scripts": {
+    "build": "bun build ./src/app.ts --outdir ./dist --target browser",
+    "sync": "bun scripts/sync.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "typescript": "^5.7.2"
+  }
+}
